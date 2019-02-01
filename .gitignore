@@ -2,3 +2,5 @@ db.sqlites
 geckodriver
 __pycache__
 *.pyc
+.idea
+geckodriver.log
