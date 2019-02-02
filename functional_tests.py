@@ -9,23 +9,23 @@ import time
 
 
 class NewVisitorTest(unittest.TestCase):
-    def setUp(self):       #测试执行前
+    def setUp(self):  # 测试执行前
         self.browser = webdriver.Firefox()
 
-    def tearDown(self):    #测试方法执行后
+    def tearDown(self):  # 测试方法执行后
         self.browser.quit()
 
-    def test_can_start_a_list_and_retrieve_it_later(self):    #测试方法
+    def test_can_start_a_list_and_retrieve_it_later(self):  # 测试方法
         # 乔伊听说有一个很酷的在线待办事项应用
         # 她去看了这个应用的首页
         self.browser.get('http://localhost:8000')
         # 她注意到网页的标题和头部包含'To-Do'这个词
-        self.assertIn('To-Do',self.browser.title)           #测试失败执行
+        self.assertIn('To-Do', self.browser.title)  # 测试失败执行
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('To-Do',header_text)
+        self.assertIn('To-Do', header_text)
 
         # 应用邀请她输入一个待办事项
-        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
@@ -61,9 +61,6 @@ class NewVisitorTest(unittest.TestCase):
 
         # 她很满意，去休息了
 
+
 if __name__ == '__main__':
-    unittest.main(warnings='ignore')    #禁止抛出ResourceWarning
-
-
-
-
+    unittest.main(warnings='ignore')  # 禁止抛出ResourceWarning
