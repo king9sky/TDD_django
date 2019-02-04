@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # @Author  : Marvin King
-# Date     : 2019-01-31 
+# Date     : 2019-01-31
+from django.test import LiveServerTestCase
 from selenium import webdriver
-import unittest
 from selenium.webdriver.common.keys import Keys
 import time
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):  # 测试执行前
         self.browser = webdriver.Firefox()
 
@@ -23,7 +23,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):  # 测试方法
         # 乔伊听说有一个很酷的在线待办事项应用
         # 她去看了这个应用的首页
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         # 她注意到网页的标题和头部包含'To-Do'这个词
         self.assertIn('To-Do', self.browser.title)  # 测试失败执行
         header_text = self.browser.find_element_by_tag_name('h1').text
@@ -58,7 +58,7 @@ class NewVisitorTest(unittest.TestCase):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
-        self.check_for_row_in_list_table('2: Use peacock feathers to make a fly ')
+        self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
         # 她想知道这个网站是否会记住她的清单
         # 她看到网站为她生成了一个唯一的URL
@@ -69,6 +69,3 @@ class NewVisitorTest(unittest.TestCase):
 
         # 她很满意，去休息了
 
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')  # 禁止抛出ResourceWarning
