@@ -24,7 +24,7 @@ def _get_latest_source(source_folder):
 
 def _update_settings(source_folder, site_name):
     settings_path = source_folder + '/TDDweb/settings.py'
-    sed(settings_path, 'DEBUG = True', 'DEBUG = Flase')
+    sed(settings_path, 'DEBUG = True', 'DEBUG = False')
     sed(settings_path,
         'ALLOWED_HOSTS =.$',
         f'ALLOWED_HOSTS = ["{site_name}"]')  # 正则匹配
