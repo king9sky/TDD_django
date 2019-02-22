@@ -1,42 +1,15 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # @Author  : Marvin King
-# Date     : 2019-01-31
-from django.test import LiveServerTestCase  #删掉
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase  #增加
+# Date     : 2019-02-22 
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import time
-from selenium.common.exceptions import WebDriverException
-import os
-
-MAX_WAIT = 10
+from .base import FunctionalTest
 
 
-class NewVisitorTest(StaticLiveServerTestCase):
-    def setUp(self):  # 测试执行前
-        self.browser = webdriver.Firefox()
-        staging_server = os.environ.get('STAGING_SERVER')
-        if staging_server:
-            self.live_server_url = 'http://' + staging_server
-
-    def tearDown(self):  # 测试方法执行后
-        self.browser.quit()
-
-    def wait_for_row_in_list_table(self, row_text):
-        start_time = time.time()
-        while True:
-            try:
-                table = self.browser.find_element_by_id('id_list_table')
-                rows = table.find_elements_by_tag_name('tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > MAX_WAIT:
-                    raise e
-                time.sleep(0.5)
-
-    def test_can_start_a_list_and_retrieve_it_later(self):  # 测试方法
+class NewVisitorTest(FunctionalTest):
+    def test_can_start_a_list_for_one_user(self):  # 测试方法
         # 乔伊听说有一个很酷的在线待办事项应用
         # 她去看了这个应用的首页
         self.browser.get(self.live_server_url)
@@ -67,7 +40,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Use peacock feathers to make a fly')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+
 
         # 页面再次刷新，她的清单显示两条事项
         table = self.browser.find_element_by_id('id_list_table')
@@ -82,6 +55,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # 她访问那个URL，发现她的清单还在
 
         # 她很满意，去休息了
+
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         # 乔伊新建一个待办事项清单
@@ -127,25 +101,3 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertIn('Buy milk', page_text)
 
         # 两个人都很满意，然后去休息了
-
-    def test_layout_and_styling(self):
-        # 乔伊访问首页
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-        # 她看到输入框完美地居中显示
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta=10
-        )
-        # 她新建了一个清单，看到输入框仍完美地居中显示
-        inputbox.send_keys('testing')
-        inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: testing')
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta=10
-        )
