@@ -122,7 +122,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
 
 EMAIL_HOST = 'smtp.126.com'
-EMAIL_HOST_USER = 'USERNAME@126.com'
+EMAIL_HOST_USER = 'autowit@126.com'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 EMAIL_PORT = 25
 EMAIL_USE_TLS = True
