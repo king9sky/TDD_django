@@ -3,10 +3,10 @@
 # @Author  : Marvin King
 # Date     : 2019-02-27 
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from accounts.models import Token
+from django.contrib import auth
 
-User = get_user_model()
+User = auth.get_user_model()
 
 
 class UserModelTest(TestCase):
@@ -17,6 +17,12 @@ class UserModelTest(TestCase):
     def test_email_is_primary_key(self):
         user = User(email='a@b.com')
         self.assertEqual(user.pk, 'a@b.com')
+
+    def test_no_problem_with_auth_login(self):
+        user = User.objects.create(email='joey@example.com')
+        user.backend = ''
+        request = self.client.request().wsgi_request
+        auth.login(request, user)
 
 
 class TokenModelTest(TestCase):
